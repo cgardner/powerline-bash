@@ -63,7 +63,7 @@ def add_git_segment(powerline):
         output = p2.communicate()[0].strip()
         if len(output) > 0:
           branch = output.rstrip()[2:]
-          p.append(' ' + branch + ' ', 250, 237)
+          p.append(' ' + branch + ' ', 250, 240)
     except subprocess.CalledProcessError:
       pass
 
