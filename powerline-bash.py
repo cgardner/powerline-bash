@@ -63,7 +63,7 @@ def add_git_segment(powerline):
         output = p2.communicate()[0].strip()
         if len(output) > 0:
           branch = output.rstrip()[2:]
-          p.append(' ' + branch + ' ', 22, 148)
+          p.append(' ' + branch + ' ', 250, 237)
     except subprocess.CalledProcessError:
       pass
 
@@ -117,12 +117,12 @@ def add_root_indicator(powerline, error):
     if int(error) != 0:
         fg = 15
         bg = 161
-    p.append(' \$ ', fg, bg)
+    p.append("\n", fg, bg)
 
 if __name__ == '__main__':
     p = Powerline()
-    p.append(' \u ', 250, 240)
-    p.append(' \h ', 250, 238)
+    p.append('\u', 250, 240)
+    #p.append(' \h ', 250, 238)
     add_cwd_segment(p)
     add_git_segment(p)
     add_svn_segment(p)
