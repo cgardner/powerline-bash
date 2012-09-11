@@ -4,6 +4,7 @@
 import os
 import subprocess
 import sys
+import re
 
 class Powerline:
     separator = '⮀'
@@ -63,7 +64,24 @@ def add_git_segment(powerline):
         output = p2.communicate()[0].strip()
         if len(output) > 0:
           branch = output.rstrip()[2:]
-          p.append(' ' + branch + ' ', 250, 240)
+          p.append(' ' + branch, 250, 240)
+    except subprocess.CalledProcessError:
+      pass
+    try:
+        p1 = subprocess.Popen(['git', 'status', '-sb'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p2 = subprocess.Popen(['head', '-n', '1'], stdin=p1.stdout, stdout=subprocess.PIPE)
+        output = p2.communicate()[0].strip()
+        regex = re.match('(.*\[(ahead|behind) (.*)\]$)', output, re.I|re.X|re.M)
+        marker = ''
+        if regex != None:
+          marker = '-'
+          fg = 162
+          if regex.group(2) == 'ahead':
+            marker = '+'
+            fg = 150
+
+          p.append(marker + regex.group(3).strip(), fg, 240)
+        p.append(' ', 167, 240)
     except subprocess.CalledProcessError:
       pass
 
