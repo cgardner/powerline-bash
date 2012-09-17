@@ -57,12 +57,14 @@ class Powerline:
         return line
 
 def add_git_segment(powerline):
+    display_end = 'false'  
     try:
         #cmd = "git branch 2> /dev/null | grep -e '\*'"
         p1 = subprocess.Popen(['git', 'branch'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p2 = subprocess.Popen(['grep', '-e', '\*'], stdin=p1.stdout, stdout=subprocess.PIPE)
         output = p2.communicate()[0].strip()
         if len(output) > 0:
+          display_end = 'true'
           branch = output.rstrip()[2:]
           p.append(' ' + branch, 250, 240)
     except subprocess.CalledProcessError:
@@ -74,6 +76,7 @@ def add_git_segment(powerline):
         regex = re.match('(.*\[(ahead|behind) (.*)\]$)', output, re.I|re.X|re.M)
         marker = ''
         if regex != None:
+          display_end = 'true'
           marker = '-'
           fg = 162
           if regex.group(2) == 'ahead':
@@ -81,7 +84,8 @@ def add_git_segment(powerline):
             fg = 150
 
           p.append(marker + regex.group(3).strip(), fg, 240)
-        p.append(' ', 167, 240)
+        if display_end == 'true' :
+          p.append(' ', 167, 240)
     except subprocess.CalledProcessError:
       pass
 
